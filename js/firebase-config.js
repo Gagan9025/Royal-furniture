@@ -33,7 +33,24 @@ auth.onAuthStateChanged(user => {
         console.log('User is signed in:', user.email);
         // Check if we're on admin page
         if (window.location.pathname.includes('admin.html')) {
-            window.handleAdminAuthState(true, user);
+            // Check admin status before allowing access
+            firebaseDB.collection('admins').doc(user.uid).get()
+                .then(adminDoc => {
+                    if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                        window.handleAdminAuthState(true, user);
+                    } else {
+                        console.error('User is not authorized as admin');
+                        alert('Access denied. Admin privileges required.');
+                        auth.signOut();
+                        window.handleAdminAuthState(false);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking admin status:', error);
+                    alert('Error verifying admin status. Please try again.');
+                    auth.signOut();
+                    window.handleAdminAuthState(false);
+                });
         }
     } else {
         console.log('No user is signed in');
@@ -49,35 +66,44 @@ auth.onAuthStateChanged(user => {
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Admins collection - only authenticated admins can read/write
+    match /admins/{document} {
+      allow read, write: if request.auth != null && request.auth.uid == document;
+    }
+    
     // Business info - public read, admin write
     match /business_info/{document} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
     
     // Interior packages - public read, admin write
     match /interior_packages/{document} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
     
     // Services - public read, admin write
     match /services/{document} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
     
     // Products - public read, admin write
     match /products/{document} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
     
     // Orders - public create, admin read/write
     match /orders/{document} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && isAdmin(request.auth.uid);
       allow create: if request.auth == null;
     }
+  }
+  
+  function isAdmin(userId) {
+    return get(/databases/$(database)/documents/admins/$(userId)).data.isAdmin == true;
   }
 }
 */
@@ -90,8 +116,12 @@ service firebase.storage {
     // Allow public read access to all files
     match /{allPaths=**} {
       allow read;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
+  }
+  
+  function isAdmin(userId) {
+    return get(/databases/$(database)/documents/admins/$(userId)).data.isAdmin == true;
   }
 }
 */

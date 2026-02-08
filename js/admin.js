@@ -6,16 +6,44 @@ window.handleAdminAuthState = function(isLoggedIn, user = null) {
     const dashboard = document.getElementById('dashboard');
     
     if (isLoggedIn) {
-        loginScreen.classList.add('hidden');
-        dashboard.classList.remove('hidden');
-        document.getElementById('admin-email-display').textContent = user.email;
-        loadDashboardData();
-        initTabs();
+        // Check if user is an admin
+        checkAdminAccess(user.uid).then(isAdmin => {
+            if (isAdmin) {
+                loginScreen.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                document.getElementById('admin-email-display').textContent = user.email;
+                loadDashboardData();
+                initTabs();
+            } else {
+                // Not an admin - show error and logout
+                alert('Access denied. Admin privileges required.');
+                firebaseAuth.signOut();
+                loginScreen.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }).catch(error => {
+            console.error('Error checking admin status:', error);
+            alert('Error verifying admin status. Please try again.');
+            firebaseAuth.signOut();
+            loginScreen.classList.remove('hidden');
+            dashboard.classList.add('hidden');
+        });
     } else {
         loginScreen.classList.remove('hidden');
         dashboard.classList.add('hidden');
     }
 };
+
+// Check if user has admin privileges
+async function checkAdminAccess(userId) {
+    try {
+        const adminDoc = await firebaseDB.collection('admins').doc(userId).get();
+        return adminDoc.exists && adminDoc.data().isAdmin === true;
+    } catch (error) {
+        console.error('Error checking admin access:', error);
+        return false;
+    }
+}
 
 // Admin Login
 document.getElementById('login-form').addEventListener('submit', async function(e) {
@@ -25,17 +53,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const password = document.getElementById('admin-password').value;
     const errorDiv = document.getElementById('login-error');
     
-    // Development mode - bypass authentication
-    // Remove these lines for production deployment
-    console.log('Login attempt:', email, password);
-    
-    // Always allow login in development mode
-    errorDiv.classList.add('hidden');
-    window.handleAdminAuthState(true, { email: email || 'admin@example.com' });
-    return;
-    
-    // Production code (commented out for development)
-    /*
+    // Production code
     try {
         await firebaseAuth.signInWithEmailAndPassword(email, password);
         errorDiv.classList.add('hidden');
@@ -44,7 +62,6 @@ document.getElementById('login-form').addEventListener('submit', async function(
         errorDiv.classList.remove('hidden');
         errorDiv.textContent = 'Invalid credentials. Please try again.';
     }
-    */
 });
 
 // Admin Logout
@@ -614,7 +631,7 @@ function showAddPackageModal() {
     
     document.body.appendChild(modal);
     
-    // Small delay to ensure DOM is fully rendered
+    // Handle image preview and form submission after a brief moment to ensure DOM is ready
     setTimeout(() => {
         // Handle image preview
         const imageInput = document.getElementById('package-image');
@@ -644,7 +661,7 @@ function showAddPackageModal() {
         } else {
             console.error('Package form not found');
         }
-    }, 100);
+    }, 50); // Reduced timeout for better responsiveness
     
     // Handle close button
     setTimeout(() => {
