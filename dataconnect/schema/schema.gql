@@ -1,0 +1,51 @@
+type User @table {
+  displayName: String!
+  email: String!
+  createdAt: Timestamp!
+  photoUrl: String
+  bio: String
+  institution: String
+}
+
+type Course @table {
+  name: String!
+  code: String!
+  createdAt: Timestamp!
+  description: String
+}
+
+type StudyMaterial @table {
+  title: String!
+  fileUrl: String!
+  materialType: String!
+  createdAt: Timestamp!
+  description: String
+  tags: [String]
+  uploader: User
+  course: Course
+}
+
+type StudyGroup @table {
+  name: String!
+  createdAt: Timestamp!
+  description: String
+  isPublic: Boolean
+  createdBy: User
+  course: Course
+}
+
+type GroupMembership @table(key: ["user", "studyGroup"]) {
+  joinedAt: Timestamp!
+  role: String
+  user: User!
+  studyGroup: StudyGroup!
+}
+
+type DiscussionPost @table {
+  content: String!
+  createdAt: Timestamp!
+  title: String
+  author: User
+  studyGroup: StudyGroup
+  parentPost: DiscussionPost
+}

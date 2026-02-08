@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - Royal Hood Wood Works</title>
+    <meta name="description" content="Professional wood crafting and furniture services">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Header -->
+    <header class="bg-black text-white shadow-lg border-b border-blue-600">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div id="business-logo" class="w-12 h-12 rounded-full flex items-center justify-center">
+                        <img src="C:\Users\ggaga\Downloads\logo.svg.jpeg" alt="Royal Hood Wood Works Logo" class="w-10 h-10">
+                    </div>
+                    <div>
+                        <h1 id="business-name" class="text-xl font-bold">Royal Hood Wood Works</h1>
+                        <p class="text-blue-300 text-sm">Professional Services</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-300">Home</a>
+                    <a href="interior.html" class="hover:text-blue-300">Interior Design</a>
+                    <a href="services.html" class="hover:text-blue-300 font-medium">Services</a>
+                    <a href="products.html" class="hover:text-blue-300">Products</a>
+                    <a href="cart.html" class="hover:text-blue-300">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="ml-1 bg-blue-600 px-2 py-1 rounded-full text-xs">0</span>
+                    </a>
+                    <a href="admin.html" class="hover:text-blue-300">
+                        <i class="fas fa-user-shield"></i>
+                        Admin
+                    </a>
+                </nav>
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-3">
+                    <a href="index.html" class="hover:text-blue-300">Home</a>
+                    <a href="interior.html" class="hover:text-blue-300">Interior Design</a>
+                    <a href="services.html" class="hover:text-blue-300 font-medium">Services</a>
+                    <a href="products.html" class="hover:text-blue-300">Products</a>
+                    <a href="cart.html" class="hover:text-blue-300 flex items-center">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                    <a href="admin.html" class="hover:text-blue-300 flex items-center">
+                        <i class="fas fa-user-shield mr-2"></i>
+                        Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-16 border-b border-blue-700">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Professional Services</h1>
+            <p class="text-xl max-w-2xl mx-auto">Expert wood crafting, repair, and maintenance services</p>
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loading" class="container mx-auto px-4 py-12 text-center">
+        <div class="flex justify-center items-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            <span class="ml-3 text-lg">Loading services...</span>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="services-section" class="container mx-auto px-4 py-12 hidden">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Premium Wood Services</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Professional craftsmanship for all your wood furniture needs</p>
+        </div>
+        
+        <div id="services-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Services will be loaded dynamically -->
+        </div>
+    </section>
+
+    <!-- No Services Message -->
+    <div id="no-services" class="container mx-auto px-4 py-12 text-center hidden">
+        <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-md mx-auto border border-gray-700">
+            <i class="fas fa-tools text-6xl text-blue-400 mb-4"></i>
+            <h3 class="text-2xl font-bold text-white mb-2">No Services Available</h3>
+            <p class="text-gray-300 mb-6">We're currently updating our service offerings. Please check back soon!</p>
+            <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 mt-16 border-t border-blue-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Royal Hood Wood Works</h3>
+                    <p class="text-blue-300">Professional wood services</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-blue-300 hover:text-white">Home</a></li>
+                        <li><a href="interior.html" class="text-blue-300 hover:text-white">Interior Design</a></li>
+                        <li><a href="services.html" class="text-blue-300 hover:text-white">Services</a></li>
+                        <li><a href="products.html" class="text-blue-300 hover:text-white">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <p class="text-blue-300 mb-2"><i class="fas fa-phone mr-2"></i> +91 9876543210</p>
+                    <p class="text-blue-300"><i class="fas fa-envelope mr-2"></i> info@royalhood.com</p>
+                </div>
+            </div>
+            <div class="border-t border-blue-800 mt-8 pt-8 text-center text-blue-400">
+                <p>&copy; 2026 Royal Hood Wood Works. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load services on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadServices();
+        });
+    </script>
+</body>
+</html>

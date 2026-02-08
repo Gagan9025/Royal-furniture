@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Package Functionality</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <h1 class="text-3xl font-bold mb-6">Package Functionality Test</h1>
+    
+    <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Test Controls</h2>
+        <button id="test-package-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+            Test Add Package Modal
+        </button>
+        <button id="check-console" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium ml-4">
+            Check Console Logs
+        </button>
+    </div>
+    
+    <div class="bg-gray-800 rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Instructions</h2>
+        <ol class="list-decimal list-inside space-y-2 text-gray-300">
+            <li>Open browser developer tools (F12)</li>
+            <li>Click the "Test Add Package Modal" button</li>
+            <li>Check the console for debugging messages</li>
+            <li>Try filling out the form and submitting</li>
+            <li>Look for any error messages in the console</li>
+        </ol>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        // Test button functionality
+        document.getElementById('test-package-btn').addEventListener('click', function() {
+            console.log('Test button clicked');
+            if (typeof showAddPackageModal === 'function') {
+                console.log('showAddPackageModal function exists, calling it');
+                showAddPackageModal();
+            } else {
+                console.error('showAddPackageModal function not found');
+            }
+        });
+        
+        document.getElementById('check-console').addEventListener('click', function() {
+            console.log('=== Package Functionality Test ===');
+            console.log('showAddPackageModal function exists:', typeof showAddPackageModal === 'function');
+            console.log('addPackage function exists:', typeof addPackage === 'function');
+            console.log('firebaseDB available:', typeof firebaseDB !== 'undefined');
+            console.log('====================================');
+        });
+    </script>
+</body>
+</html>

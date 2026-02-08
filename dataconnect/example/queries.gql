@@ -1,0 +1,44 @@
+mutation CreateStudyMaterial($courseId: UUID, $uploaderId: UUID, $fileUrl: String!, $materialType: String!, $title: String!, $description: String) @auth(level: USER) {
+  studyMaterial_insert(data: {courseId: $courseId, uploaderId: $uploaderId, fileUrl: $fileUrl, materialType: $materialType, title: $title, description: $description})
+}
+
+query ListStudyGroups @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  studyGroups {
+    id
+    name
+    description
+    isPublic
+    course {
+      id
+      name
+      code
+    }
+    createdBy {
+      id
+      displayName
+    }
+  }
+}
+
+mutation JoinStudyGroup($studyGroupId: UUID!) @auth(level: USER) {
+  groupMembership_insert(data: {studyGroupId: $studyGroupId, userId_expr: "auth.uid", joinedAt_expr: "request.time"})
+}
+
+query GetStudyMaterial($id: UUID!) @auth(level: USER) {
+  studyMaterial(id: $id) {
+    id
+    title
+    description
+    fileUrl
+    materialType
+    tags
+    course {
+      id
+      name
+    }
+    uploader {
+      id
+      displayName
+    }
+  }
+}

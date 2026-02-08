@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Wood plank base -->
+  <rect x="10" y="20" width="80" height="60" rx="10" fill="#8B4513"/>
+  
+  <!-- Wood grain lines -->
+  <path d="M15,25 Q30,30 45,25 T75,25" stroke="#A0522D" stroke-width="1" fill="none"/>
+  <path d="M15,35 Q40,40 65,35 T85,35" stroke="#A0522D" stroke-width="1" fill="none"/>
+  <path d="M15,45 Q35,50 55,45 T85,45" stroke="#A0522D" stroke-width="1" fill="none"/>
+  <path d="M15,55 Q45,60 75,55 T85,55" stroke="#A0522D" stroke-width="1" fill="none"/>
+  <path d="M15,65 Q30,70 45,65 T75,65" stroke="#A0522D" stroke-width="1" fill="none"/>
+  
+  <!-- Crown symbol representing "Royal" -->
+  <path d="M35,18 L40,12 L45,18 L50,12 L55,18 L60,12 L65,18" stroke="#FFD700" stroke-width="2" fill="none"/>
+  <circle cx="50" cy="15" r="2" fill="#FFD700"/>
+  
+  <!-- Elegant woodworker tool (chisel and ruler) -->
+  <rect x="25" y="45" width="50" height="3" rx="1" fill="#3498DB"/>
+  <rect x="72" y="40" width="3" height="13" fill="#3498DB"/>
+  <path d="M20,50 L25,45 L25,55 Z" fill="#ECF0F1"/>
+  
+  <!-- Text "RH" initials in elegant style -->
+  <text x="50" y="70" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#F5F5F5" text-anchor="middle">RH</text>
+</svg>

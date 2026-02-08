@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Firebase Connection</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700">
+        <h1 class="text-2xl font-bold text-white mb-6">Firebase Connection Test</h1>
+        
+        <div class="space-y-4">
+            <div id="firebase-status" class="p-4 rounded-lg bg-gray-700">
+                <p class="font-medium text-gray-200">Testing Firebase connection...</p>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-4">
+                <h2 class="text-lg font-semibold text-gray-300 mb-3">Test Actions</h2>
+                <div class="space-y-2">
+                    <button onclick="testFirestoreRead()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                        Test Firestore Read
+                    </button>
+                    <button onclick="testFirestoreWrite()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                        Test Firestore Write (Requires Auth)
+                    </button>
+                    <button onclick="checkAuth()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded">
+                        Check Auth Status
+                    </button>
+                </div>
+            </div>
+            
+            <div id="test-results" class="mt-6 p-4 bg-gray-700 rounded-lg border border-gray-600">
+                <h3 class="font-semibold text-gray-300 mb-2">Test Results:</h3>
+                <div id="results-content" class="text-sm text-gray-400">
+                    No tests run yet.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        // Update status display
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('firebase-status');
+            const colors = {
+                'success': 'bg-green-100 text-green-800',
+                'error': 'bg-red-100 text-red-800',
+                'info': 'bg-blue-100 text-blue-800',
+                'warning': 'bg-yellow-100 text-yellow-800'
+            };
+            statusDiv.className = `p-4 rounded-lg ${colors[type]}`;
+            statusDiv.innerHTML = `<p class="font-medium">${message}</p>`;
+        }
+
+        // Add test result
+        function addResult(message, type = 'info') {
+            const resultsContent = document.getElementById('results-content');
+            const colors = {
+                'success': 'text-green-600',
+                'error': 'text-red-600',
+                'info': 'text-blue-600',
+                'warning': 'text-yellow-600'
+            };
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `mt-2 p-2 rounded ${colors[type]}`;
+            resultDiv.innerHTML = `<span class="font-medium">${new Date().toLocaleTimeString()}:</span> ${message}`;
+            resultsContent.appendChild(resultDiv);
+            resultsContent.scrollTop = resultsContent.scrollHeight;
+        }
+
+        // Initial check
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof firebase !== 'undefined') {
+                updateStatus('Firebase SDK loaded successfully', 'success');
+                addResult('Firebase initialized');
+            } else {
+                updateStatus('Firebase SDK failed to load', 'error');
+                addResult('Firebase initialization failed', 'error');
+            }
+        });
+
+        // Test Firestore read (public read should work)
+        async function testFirestoreRead() {
+            try {
+                addResult('Testing Firestore read...');
+                const doc = await firebaseDB.collection('business_info').doc('main').get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    addResult(`Read successful: ${data.businessName || 'No business name'}`, 'success');
+                } else {
+                    addResult('No business info document found - this is normal for new setup', 'warning');
+                }
+            } catch (error) {
+                addResult(`Read error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test Firestore write (requires auth)
+        async function testFirestoreWrite() {
+            try {
+                addResult('Testing Firestore write...');
+                const testDoc = {
+                    test: 'Test data',
+                    timestamp: new Date().toISOString()
+                };
+                await firebaseDB.collection('test_collection').add(testDoc);
+                addResult('Write successful - user is authenticated!', 'success');
+            } catch (error) {
+                if (error.code === 'permission-denied') {
+                    addResult('Write failed - user not authenticated (this is expected for public users)', 'warning');
+                } else {
+                    addResult(`Write error: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // Check authentication status
+        function checkAuth() {
+            const user = firebaseAuth.currentUser;
+            if (user) {
+                addResult(`User authenticated: ${user.email}`, 'success');
+            } else {
+                addResult('No user authenticated', 'info');
+            }
+        }
+
+        // Listen for auth state changes
+        firebaseAuth.onAuthStateChanged(user => {
+            if (user) {
+                addResult(`Auth state changed: User signed in as ${user.email}`, 'success');
+            } else {
+                addResult('Auth state changed: User signed out', 'info');
+            }
+        });
+    </script>
+</body>
+</html>
