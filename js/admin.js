@@ -476,26 +476,37 @@ function showAddProductModal() {
     
     document.body.appendChild(modal);
     
-    // Handle image preview
-    const imageInput = document.getElementById('product-image');
-    imageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('product-image-preview').innerHTML = 
-                    `<img src="${e.target.result}" alt="Preview" class="image-preview">`;
-            };
-            reader.readAsDataURL(file);
+    // Handle image preview and form submission after a brief moment to ensure DOM is ready
+    setTimeout(() => {
+        // Handle image preview
+        const imageInput = document.getElementById('product-image');
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('product-image-preview').innerHTML = 
+                            `<img src="${e.target.result}" alt="Preview" class="image-preview">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
-    });
-    
-    // Handle form submission
-    document.getElementById('add-product-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        await addProduct();
-        modal.remove();
-    });
+        
+        // Handle form submission
+        const form = document.getElementById('add-product-form');
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('Product form submitted');
+                await addProduct();
+                modal.remove();
+            });
+        } else {
+            console.error('Product form not found');
+        }
+    }, 50); // Reduced timeout for better responsiveness
     
     // Handle close button
     modal.querySelectorAll('.modal-close').forEach(btn => {
@@ -811,26 +822,37 @@ function showAddServiceModal() {
     
     document.body.appendChild(modal);
     
-    // Handle image preview
-    const imageInput = document.getElementById('service-image');
-    imageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('service-image-preview').innerHTML = 
-                    `<img src="${e.target.result}" alt="Preview" class="image-preview">`;
-            };
-            reader.readAsDataURL(file);
+    // Handle image preview and form submission after a brief moment to ensure DOM is ready
+    setTimeout(() => {
+        // Handle image preview
+        const imageInput = document.getElementById('service-image');
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('service-image-preview').innerHTML = 
+                            `<img src="${e.target.result}" alt="Preview" class="image-preview">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
-    });
-    
-    // Handle form submission
-    document.getElementById('add-service-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        await addService();
-        modal.remove();
-    });
+        
+        // Handle form submission
+        const form = document.getElementById('add-service-form');
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('Service form submitted');
+                await addService();
+                modal.remove();
+            });
+        } else {
+            console.error('Service form not found');
+        }
+    }, 50); // Reduced timeout for better responsiveness
     
     // Handle close button
     modal.querySelectorAll('.modal-close').forEach(btn => {
